@@ -75,6 +75,24 @@ This repo uses the OpenClaw `skill-creator` packaging script. Example:
 python3 ~/.npm-global/lib/node_modules/openclaw/skills/skill-creator/scripts/package_skill.py ./skills/acestep ./dist
 ```
 
+## Companion Skills for the Full Music Pipeline
+
+This repo focuses on **ACE-Step-specific production and execution skills**. For the full music creation pipeline, pair it with these companion skills:
+
+- `music-producer` — creates ACE-Step-ready music prompt packages, including caption direction, lyrics direction, BPM, structure, and generation strategy
+- `lyricist` — writes stronger, more singable lyrics with better imagery, hooks, POV, and section structure
+- `creative-critic` — critiques prompt packages before generation to reduce generic output and improve creative quality
+
+### Recommended End-to-End Workflow
+
+1. `music-producer` — shape the brief and generation plan
+2. `lyricist` — write or refine the lyrics
+3. `creative-critic` — critique the package before generation
+4. `acestep` — generate the music
+5. `acestep-lyrics-transcription` — create timed lyrics / LRC
+6. `acestep-thumbnail` — generate cover art or MV background art
+7. `acestep-simplemv` — render the final music video
+
 ## Releasing
 
 Manual checklist:
