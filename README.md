@@ -1,6 +1,6 @@
 # ACE-Step Skills
 
-Reusable AI-agent skills for working with [ACE-Step](https://github.com/ace-step/ACE-Step-1.5): music generation, installation/troubleshooting, songwriting, lyrics transcription, and simple MV rendering.
+Reusable AI-agent skills for working with [ACE-Step](https://github.com/ace-step/ACE-Step-1.5): music generation, installation/troubleshooting, songwriting, lyrics transcription, thumbnail generation, and simple MV rendering.
 
 ## Repo Layout
 
@@ -9,7 +9,9 @@ ace-step-skills/
 ├── skills/                # Source skill folders
 ├── dist/                  # Packaged .skill artifacts
 ├── docs/                  # Top-level repo docs / translations
+├── scripts/               # Repo helpers (for example release automation)
 ├── INVENTORY.md           # Skill + script inventory
+├── RELEASE_CHECKLIST.md   # Human release checklist
 └── README.md
 ```
 
@@ -22,6 +24,7 @@ ace-step-skills/
 | `acestep-lyrics-transcription` | Transcribe audio into timestamped lyrics (LRC/SRT/JSON) | `scripts/acestep-lyrics-transcription.sh`, `scripts/config.example.json` |
 | `acestep-simplemv` | Render simple lyric music videos with Remotion | `scripts/render-mv.sh`, `scripts/render.sh`, `scripts/render.mjs`, Remotion project files |
 | `acestep-songwriting` | Songwriting/planning guidance for ACE-Step prompts | none |
+| `acestep-thumbnail` | Generate cover art / thumbnails for songs and MVs via Gemini | `scripts/acestep-thumbnail.sh`, `scripts/config.example.json` |
 
 Full inventory: [INVENTORY.md](INVENTORY.md)
 
@@ -34,6 +37,7 @@ The following packaged skill artifacts are built in `dist/`:
 - `dist/acestep-lyrics-transcription.skill`
 - `dist/acestep-simplemv.skill`
 - `dist/acestep-songwriting.skill`
+- `dist/acestep-thumbnail.skill`
 
 ## Install / Use
 
@@ -71,8 +75,20 @@ This repo uses the OpenClaw `skill-creator` packaging script. Example:
 python3 ~/.npm-global/lib/node_modules/openclaw/skills/skill-creator/scripts/package_skill.py ./skills/acestep ./dist
 ```
 
+## Releasing
+
+Manual checklist:
+- [RELEASE_CHECKLIST.md](RELEASE_CHECKLIST.md)
+
+One-command helper from an authenticated shell:
+
+```bash
+./scripts/release.sh v0.1.1
+```
+
 ## Notes
 
 - `config.example.json` files are examples; local `config.json` remains ignored.
 - `acestep-simplemv` includes a small Remotion app under `scripts/`.
 - `acestep-docs` and `acestep-songwriting` are documentation-only skills with no bundled executables.
+- `git` is the preferred sync/push transport on this host; `gh` is best used for GitHub-specific actions like releases.

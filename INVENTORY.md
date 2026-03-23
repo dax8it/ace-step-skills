@@ -54,3 +54,12 @@ This file inventories every skill in this repo plus bundled scripts/resources re
 - Description: Music songwriting guide for ACE-Step. Provides professional knowledge on writing captions, lyrics, choosing BPM/key/duration, and structuring songs. Use this skill when users want to create, write, or plan a song before generating it with ACE-Step.
 - Bundled scripts/resources: none
 - Packaged artifact: `dist/acestep-songwriting.skill`
+
+### acestep-thumbnail
+
+- Path: `skills/acestep-thumbnail`
+- Description: Generate song cover/thumbnail images using Gemini API. Creates artistic images suitable for music video backgrounds. Use when users want to generate album art, song covers, thumbnails, or background images for MVs.
+- Bundled scripts/resources:
+  - `skills/acestep-thumbnail/scripts/acestep-thumbnail.sh`
+  - `skills/acestep-thumbnail/scripts/config.example.json`
+- Packaged artifact: `dist/acestep-thumbnail.skill`
