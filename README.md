@@ -1,190 +1,78 @@
-# ACE-Step Skills for Any Agents
+# ACE-Step Skills
 
-[![en](https://img.shields.io/badge/lang-English-blue.svg)](README.md) [![zh](https://img.shields.io/badge/lang-中文-red.svg)](docs/i18n/README_ZH.md) [![ja](https://img.shields.io/badge/lang-日本語-green.svg)](docs/i18n/README_JA.md) [![ko](https://img.shields.io/badge/lang-한국어-yellow.svg)](docs/i18n/README_KO.md) [![de](https://img.shields.io/badge/lang-Deutsch-black.svg)](docs/i18n/README_DE.md) [![fr](https://img.shields.io/badge/lang-Français-purple.svg)](docs/i18n/README_FR.md) [![ru](https://img.shields.io/badge/lang-Русский-orange.svg)](docs/i18n/README_RU.md)
+Reusable AI-agent skills for working with [ACE-Step](https://github.com/ace-step/ACE-Step-1.5): music generation, installation/troubleshooting, songwriting, lyrics transcription, and simple MV rendering.
 
-Custom Skills for AI Agents (Claude Code, OpenAI Codex, etc.) to generate music via [ACE-Step](https://github.com/ace-step/ACE-Step-1.5) API.
+## Repo Layout
 
-## Available Skills
+```text
+ace-step-skills/
+├── skills/                # Source skill folders
+├── dist/                  # Packaged .skill artifacts
+├── docs/                  # Top-level repo docs / translations
+├── INVENTORY.md           # Skill + script inventory
+└── README.md
+```
 
-| Skill | Description |
-|-------|-------------|
-| **acestep** | Music generation via ACE-Step API |
-| **acestep-docs** | Documentation and troubleshooting |
+## Skills in This Repo
 
-## Features
+| Skill | Purpose | Bundled scripts/resources |
+|---|---|---|
+| `acestep` | Generate/edit/remix music via ACE-Step API | `scripts/acestep.sh`, `scripts/config.example.json` |
+| `acestep-docs` | ACE-Step installation, API, GPU, and troubleshooting docs | none |
+| `acestep-lyrics-transcription` | Transcribe audio into timestamped lyrics (LRC/SRT/JSON) | `scripts/acestep-lyrics-transcription.sh`, `scripts/config.example.json` |
+| `acestep-simplemv` | Render simple lyric music videos with Remotion | `scripts/render-mv.sh`, `scripts/render.sh`, `scripts/render.mjs`, Remotion project files |
+| `acestep-songwriting` | Songwriting/planning guidance for ACE-Step prompts | none |
 
-### acestep (Music Generation)
+Full inventory: [INVENTORY.md](INVENTORY.md)
 
-- **Text-to-Music** - Generate music from descriptions
-- **Lyrics Generation** - Auto-generate or manually specify lyrics
-- **Audio Continuation** - Continue from existing audio
-- **Audio Repainting** - Modify specific parts of audio
-- **Random Generation** - Generate random music samples
+## Packaged Artifacts
 
-### acestep-docs (Documentation)
+The following packaged skill artifacts are built in `dist/`:
 
-- **Installation Guide** - Setup and configuration help
-- **GPU Compatibility** - VRAM requirements and hardware recommendations
-- **Gradio UI Guide** - Web interface usage
-- **Inference Tuning** - Parameter optimization
-- **API Reference** - REST API and OpenRouter integration
+- `dist/acestep.skill`
+- `dist/acestep-docs.skill`
+- `dist/acestep-lyrics-transcription.skill`
+- `dist/acestep-simplemv.skill`
+- `dist/acestep-songwriting.skill`
 
-## Prerequisites
+## Install / Use
 
-- **ACE-Step API Server** - Running [ACE-Step V1.5](https://github.com/ace-step/ACE-Step-1.5) API service
-
-## Installation
+Copy one or more skill folders from `skills/` into your agent skill directory.
 
 ### Claude Code
 
-Copy desired skill folders from `skills/` to:
-
-**Project level** (current project only):
-```
+Project-level:
+```text
 your-project/.claude/skills/
 ```
 
-**Global level** (all projects):
-```
+Global:
+```text
 ~/.claude/skills/
 ```
 
-### OpenAI Codex
+### OpenAI Codex / similar agent layouts
 
-Copy desired skill folders from `skills/` to:
-
-**Project level**:
-```
+Project-level:
+```text
 your-project/.agents/skills/
 ```
 
-**Global level**:
-```
+Global:
+```text
 ~/.agents/skills/
 ```
 
-### Directory Structure
+## Packaging
 
-```
-skills/
-├── acestep/                    # Music generation skill
-│   ├── SKILL.md
-│   └── scripts/
-│       ├── acestep.sh
-│       └── config.json
-└── acestep-docs/               # Documentation skill
-    ├── SKILL.md
-    ├── getting-started/
-    │   ├── README.md
-    │   ├── Tutorial.md
-    │   └── ABOUT.md
-    ├── guides/
-    │   ├── GRADIO_GUIDE.md
-    │   ├── INFERENCE.md
-    │   └── GPU_COMPATIBILITY.md
-    └── api/
-        ├── API.md
-        └── Openrouter_API.md
-```
-
-## Configuration (acestep)
-
-Edit `acestep/scripts/config.json` to configure API connection and defaults:
-
-```json
-{
-  "api_url": "http://127.0.0.1:8001",
-  "api_key": "",
-  "generation": {
-    "thinking": true,
-    "use_format": true,
-    "audio_format": "mp3",
-    "vocal_language": "en"
-  }
-}
-```
-
-### Options
-
-| Option | Default | Description |
-|--------|---------|-------------|
-| `api_url` | `http://127.0.0.1:8001` | API server address |
-| `api_key` | `""` | API key (optional) |
-| `generation.thinking` | `true` | Enable 5Hz LM (high quality) |
-| `generation.use_format` | `true` | Enhance caption/lyrics via LM |
-| `generation.audio_format` | `mp3` | Output format (mp3/wav/flac) |
-| `generation.vocal_language` | `en` | Vocal language |
-
-## Usage (acestep)
-
-### In Agent
-
-After installation, mention music generation in conversation:
-
-```
-User: Generate a cheerful pop song
-User: Create a song about spring
-User: Generate jazz background music
-```
-
-### Command Line
+This repo uses the OpenClaw `skill-creator` packaging script. Example:
 
 ```bash
-# Check API status
-./scripts/acestep.sh health
-
-# Generate music - Caption mode
-./scripts/acestep.sh generate "Pop music with guitar"
-
-# Generate music - Simple mode (LM auto-generates)
-./scripts/acestep.sh generate -d "A cheerful song about spring"
-
-# With lyrics
-./scripts/acestep.sh generate -c "Lyrical pop" -l "[Verse] Hello world"
-
-# Random generation
-./scripts/acestep.sh random
-
-# Check task status
-./scripts/acestep.sh status <job_id>
+python3 ~/.npm-global/lib/node_modules/openclaw/skills/skill-creator/scripts/package_skill.py ./skills/acestep ./dist
 ```
 
-### Options
+## Notes
 
-| Option | Description |
-|--------|-------------|
-| `-c, --caption` | Music style description |
-| `-d, --description` | Simple description, LM auto-generates |
-| `-l, --lyrics` | Lyrics content |
-| `--no-thinking` | Disable thinking mode |
-| `--steps` | Diffusion steps |
-| `--guidance` | Guidance scale |
-| `--duration` | Audio duration (seconds) |
-| `--bpm` | Tempo |
-
-## Output
-
-Results saved to `acestep_output` folder:
-
-```
-project_root/
-├── acestep_output/
-│   ├── <job_id>.json      # Task result (JSON)
-│   ├── <job_id>_1.mp3     # Audio file
-│   └── ...
-```
-
-## GPU Memory
-
-| VRAM | LM Model | Notes |
-|------|----------|-------|
-| ≤6GB | None (DiT only) | LM disabled |
-| 6-12GB | `acestep-5Hz-lm-0.6B` | Lightweight |
-| 12-16GB | `acestep-5Hz-lm-1.7B` | Better quality |
-| ≥16GB | `acestep-5Hz-lm-4B` | Best quality |
-
-## References
-
-- [acestep/SKILL.md](skills/acestep/SKILL.md) - Music generation API documentation
-- [acestep-docs/SKILL.md](skills/acestep-docs/SKILL.md) - Documentation skill index
-- [ACE-Step](https://github.com/ace-step/ACE-Step-1.5) - ACE-Step project
+- `config.example.json` files are examples; local `config.json` remains ignored.
+- `acestep-simplemv` includes a small Remotion app under `scripts/`.
+- `acestep-docs` and `acestep-songwriting` are documentation-only skills with no bundled executables.
